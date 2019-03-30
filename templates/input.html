@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{url_for('decide')}}"><span class="glyphicon glyphicon-home" style="color: white"></span><b>&nbsp;Nile : Your Online Cart</b></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="/items_in_cart/{{id}}"><span class="glyphicon glyphicon-shopping-cart" style="color: white"></span><b>&nbsp;Cart</b></a></li>
+                <li><a href="/bought_list/{{idd}}"><span class="glyphicon glyphicon-edit" style="color: white"></span><b>&nbsp;Bought Items</b></a></li>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>More ..</b><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{url_for('authenticate_seller')}}"><span class="glyphicon glyphicon-usd"></span><b> Sell on Nile </b></a></li>
+                        <li><a href="{{url_for('contact')}}"><span class="glyphicon glyphicon-earphone"></span><b> Contact us </b></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left" action="{{url_for('index')}}" enctype="multipart/form-data" method="POST">
+                <div class="input-group">
+                    {{nform.csrf_token}} {{nform.search(class_="form-control",placeholder="Enter the product name")}}
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                      </button>
+                    </div>
+                </div>
+            </form>
+            <div style="padding-left: 85vw;">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{url_for('adminncheck')}}"><b>ADMIN</b></a></li>
+                </ul>
+            </div>
+            <div style="padding-left: 90vw;">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{url_for('logout')}}"><b>LOGOUT</b></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h2> Add Product </h2>
+        <form action="{{ url_for('add') }}" method="POST" enctype="multipart/form-data">
+            {{form.csrf_token}}
+            <div class="form-group">
+                {{form.seller_id.label}} {{form.seller_id(autocomplete="off",class_="form-control")}}
+                <ul>
+                    {% for error in form.seller_id.errors %}
+                    <li style="color:red;">{{error}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="form-group">
+                {{form.product_name.label}} {{form.product_name(autocomplete="off",class_="form-control")}}
+                <ul>
+                    {% for error in form.product_name.errors %}
+                    <li style="color:red;">{{error}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="form-group">
+                {{form.product_category.label}} {{form.product_category(autocomplete="off",class_="form-control")}}
+                <ul>
+                    {% for error in form.product_category.errors %}
+                    <li style="color:red;">{{error}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="form-group">
+                {{form.product_description.label}} {{form.product_description(cols="20",rows="5",class_="form-control")}}
+                <ul>
+                    {% for error in form.product_description.errors %}
+                    <li style="color:red;">{{error}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="form-group">
+                {{form.product_price.label}} {{form.product_price(autocomplete="off",class_="form-control")}}
+                <ul>
+                    {% for error in form.product_price.errors %}
+                    <li style="color:red;">{{error}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            {{form.product_image.label}} {{form.product_image}}
+            <ul>
+                {% for error in form.product_image.errors %}
+                <li style="color:red;">{{error}}</li>
+                {% endfor %}
+            </ul>
+            {{form.product_quantity.label}} {{form.product_quantity(autocomplete="off",class_="form-control")}}
+            <ul>
+                {% for error in form.product_quantity.errors %}
+                <li style="color:red;">{{error}}</li>
+                {% endfor %}
+            </ul>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <ul>
+            {% if wrong %}
+            <li style="color:red;">Enter your own seller-id</li>
+            {% endif %}
+        </ul>
+</body>
+
+</html>

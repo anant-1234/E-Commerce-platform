@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+    <head>
+        <title> Payment </title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <style>
+            body {
+                background-color: #f1f1f1;
+                padding: 20px;
+                font-family: Arial;
+            }
+
+            .main {
+                max-width: 1000px;
+                margin: auto;
+            }
+
+            h1 {
+                font-size: 50px;
+                word-break: break-all;
+            }
+
+            .row {
+                margin: 10px -16px;
+            }
+
+            .row,
+            .row > .column {
+                padding: 8px;
+            }
+
+            .column {
+                float: left;
+                width: 33.33%;
+                display: none; 
+            }
+
+            .row:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+
+            .content {
+                background-color: white;
+                padding: 10px;
+            }
+
+            .show {
+              display: block;
+            }
+
+            .btn1 {
+              border: none;
+              outline: none;
+              padding: 7px 14px;
+              background-color: white;
+              cursor: pointer;
+            }
+
+            .btn1:hover {
+              background-color: #ddd;
+            }
+
+            .btn1.active {
+              background-color: #666;
+              color: white;
+            }
+            body{
+                background-color: #f1f3f6;
+            }
+            .imgg{
+                margin-left: auto;
+            margin-right: auto;
+            display: block;
+            }
+            .form-control{
+                width:40%;
+            }
+
+        </style>
+    </head>
+        <body style="font-family: 'Open Sans', sans-serif;">
+         <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+              <a class="navbar-brand" href="{{url_for('decide')}}"><span class="glyphicon glyphicon-home" style="color: white"></span><b>&nbsp;Nile : Your Online Cart</b></a>
+          </div>
+          <ul class="nav navbar-nav">
+              <li><a href="/items_in_cart/{{id}}"><span class="glyphicon glyphicon-shopping-cart" style="color: white"></span><b>&nbsp;Cart</b></a></li>
+              <li><a href="/bought_list/{{idd}}"><span class="glyphicon glyphicon-edit" style="color: white"></span><b>&nbsp;Bought Items</b></a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>More ..</b><span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{url_for('authenticate_seller')}}"><span class="glyphicon glyphicon-usd"></span><b> Sell on Nile </b></a></li>
+                <li><a href="{{url_for('contact')}}"><span class="glyphicon glyphicon-earphone"></span><b> Contact us </b></a></li>
+              </ul>
+              </li> 
+          </ul> 
+          <form class="navbar-form navbar-left" action="{{url_for('index')}}" enctype="multipart/form-data" method="POST">
+              <div class="input-group">
+                <!-- <input type="text" class="form-control" placeholder="Enter the product name" name="search"> -->
+                  
+            {{nform.csrf_token}}
+            {{nform.search(class_="form-control",placeholder="Enter the product name")}}
+            <div class="input-group-btn">
+                      <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                      </button>
+                  </div>
+              </div>
+          </form>
+          <div style="padding-left: 85vw;">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{url_for('adminncheck')}}"><b>ADMIN</b></a></li>  
+                    </ul>
+           </div> 
+           <div style="padding-left: 90vw;">
+          <ul class="nav navbar-nav">
+              <li><a href="{{url_for('logout')}}"><b>LOGOUT</b></a></li>  
+          </ul>
+      </div> 
+      </div>  
+    </nav>  
+            <div class="container">
+              <div class="centered title"><h1>Welcome to our checkout.</h1></div>
+            </div>
+            <hr class="featurette-divider"></hr>
+                 <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="tab-content">
+                                <div id="stripe" class="tab-pane fade in active">
+                                    <script src='https://js.stripe.com/v2/' type='text/javascript'></script>
+                                    
+                                    <form accept-charset="UTF-8" action="/pay_on_buy/{{idd}}/{{sum}}" class="require-validation" data-cc-on-file="false" data-stripe-publishable-key="pk_bQQaTxnaZlzv4FnnuZ28LFHccVSaj" id="payment-form" method="post" enctype="multipart/form-data">
+                                        {{form.csrf_token}} 
+                                        <div style="margin:0;padding:0;display:inline">
+                                            <input name="utf8" type="hidden" value="✓" />
+                                            <input name="_method" type="hidden" value="PUT" />
+                                            <input name="authenticity_token" type="hidden" value="qLZ9cScer7ZxqulsUWazw4x3cSEzv899SP/7ThPCOV8=" />
+                                        </div>
+                                        <br>
+                                        <div class='form-row'>
+                                            <div class='form-group required'>
+                                
+                                                <label class='control-label'>Name on Card</label>
+                                                {{form.name(autocomplete="off",class_="form-control")}}
+                                                <ul>
+         {% for error in form.name.errors %}
+            <li style ="color:red;">{{error}}</li>
+         {% endfor %}
+         </ul>
+                                            </div>
+                            
+                                        </div>
+                                        <div class='form-row'>
+                                            <div class='form-group card required'>
+                                                <label class='control-label'>Card Number</label>
+                                                {{form.card_no(autocomplete="off",class_="form-control")}}
+                                                <ul>
+         {% for error in form.card_no.errors %}
+            <li style ="color:red;">{{error}}</li>
+         {% endfor %}
+         </ul>
+                                            </div>
+                                        </div>
+                                        <div class='form-row'>
+                                            <div class='form-group card required'>
+                                                <label class='control-label'>Billing Address</label>
+                                                {{form.address(autocomplete="off",class_="form-control")}}
+                                                <ul>
+         {% for error in form.address.errors %}
+            <li style ="color:red;">{{error}}</li>
+         {% endfor %}
+         </ul>
+                                            </div>
+                                        </div>
+                                        <div class='form-row'>
+                                            <div class='form-group cvc required'>
+                                                <label placeholder="cvc" class='control-label'>CVC</label>
+                                                {{form.cvc(autocomplete="off",class_="form-control")}}
+                                                <ul>
+         {% for error in form.cvc.errors %}
+            <li style ="color:red;">{{error}}</li>
+         {% endfor %}
+         </ul>
+                                            </div>
+                                            <div class='form-group expiration required'>
+                                                <label class='control-label'>Expiration Month</label>
+                                                {{form.expiration_m(autocomplete="off",class_="form-control")}}
+                                                <ul>
+         {% for error in form.expiration_m.errors %}
+            <li style ="color:red;">{{error}}</li>
+         {% endfor %}
+         </ul>
+                                            </div>
+                                            <div class='form-group expiration required'>
+                                                <label class='control-label'>Expiration Year</label>
+                                                {{form.expiration_y(autocomplete="off",class_="form-control")}}
+                                                <ul>
+         {% for error in form.expiration_y.errors %}
+            <li style ="color:red;">{{error}}</li>
+         {% endfor %}
+         </ul>
+                                            </div>
+                                        </div>
+            
+                                        <div class='form-row'>
+                                            <div class='form-group'>
+                                                <label class='control-label'></label>
+                                                <button class='form-control btn btn-primary' type='submit'> Continue </button>
+              
+                                    </form>    
+                                </div>
+                            </div>    
+                        </div>
+                  
+                        <div id="paypal" class="tab-pane fade">
+                            <form action="/buy_all/{{idd}}">
+                                <div class="paypalResult"></div>
+                                <br>
+                                <input type="hidden" id="action" value="paypal"></input>
+                                <input type="hidden" id="token" value="token-supersecuretoken123123123"></input>
+                                <img src="{{ url_for('static',filename='paytm.png') }}" alt="paytm" width="100%"></a>
+                                <br><br><br>
+                                <center><button class='form-control btn btn-primary submit-button' type='submit'> Continue </button></center>
+                            </form>           
+                        </div>
+                </div>
+                
+                
+              
+            </div>   
+            
+            <div class="col-sm-6">
+               <label class='control-label'></label>
+            
+              <div class="alert alert-info"">Please choose your method of payment and hit continue. You will then be sent down to pay using your selected payment option.</div>
+           <br>
+             <div class="btn-group-vertical btn-block">
+                 <a class="btn btn-default" style="text-align: left;" data-toggle="tab" href="#stripe">Stripe/Credit Card</a>
+              <a class="btn btn-default" style="text-align: left;" data-toggle="tab" href="#paypal">Paytm</a>
+              </div>
+              
+              <br><br><br>
+             
+             <div class="jumbotron jumbotron-flat">
+        <div class="center"><h2><b>BALANCE DUE:</b></h2></div>
+               <div class="paymentAmt">&#x20B9; {{sum}}</div>
+               
+                     
+              
+            </div>
+            
+         
+              
+                <br><br><br>
+            </div>
+                        
+                        
+                        
+                    </div>
+                    
+                    
+                    
+                </div>
+            </div>
+            
+            
+            </form>
+            
+        </body>
+</html>     

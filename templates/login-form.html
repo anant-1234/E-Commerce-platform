@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap Simple Login Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/login_form.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{url_for('decide')}}"><span class="glyphicon glyphicon-home" style="color: white"></span><b>&nbsp;Nile : Your Online Cart</b></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>More ..</b><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{url_for('authenticate_seller')}}"><span class="glyphicon glyphicon-usd"></span><b> Sell on Nile </b></a></li>
+                        <li><a href="{{url_for('contact')}}"><span class="glyphicon glyphicon-earphone"></span><b> Contact us </b></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left" action="{{url_for('index')}}" enctype="multipart/form-data" method="POST">
+                <div class="input-group">
+                    {{nform.csrf_token}} {{nform.search(class_="form-control",placeholder="Enter the product name")}}
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                      </button>
+                    </div>
+                </div>
+            </form>
+            <div style="padding-left: 85vw;">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{url_for('adminncheck')}}"><b>ADMIN</b></a></li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li<{{ message }}</li>
+            {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+    <div class="login-form">
+        <form action=" {{ url_for('login') }}" method="post">
+            <h2 class="text-center">Log in</h2>
+            <div class="form-group">
+                {{ form.username(class_='form-control',placeholder="Username",autocomplete="off") }}
+                <ul>
+                    {% if hacker==1 %}
+                    <li style="color:red;">SQL Injection Alert</li>
+                    {% endif %}
+                </ul>
+
+            </div>
+            <div class="form-group">
+                {{ form.password(class_='form-control',placeholder="Password",autocomplete="off") }} {% if wrong_password %}
+                <ul>
+                    <li style="color:red;">Wrong Password Entered</li>
+                </ul>
+                {%endif%}
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Log in</button>
+            </div>
+            {% if found==0 %}
+            <ul>
+                <li style="color:red;">Invalid Credentials</li>
+            </ul>
+            {%endif%}
+        </form>
+        <p class="text-center"><a href="{{ url_for('signup') }}">Create an Account</a></p>
+    </div>
+</body>
+
+</html>

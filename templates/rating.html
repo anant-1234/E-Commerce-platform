@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <title>Rate the product</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $(':radio').change(function() {
+            console.log('New star rating: ' + this.value);
+        });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../static/rating.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{url_for('decide')}}"><span class="glyphicon glyphicon-home" style="color: white"></span><b>&nbsp;Nile : Your Online Cart</b></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="/items_in_cart/{{id}}"><span class="glyphicon glyphicon-shopping-cart" style="color: white"></span><b>&nbsp;Cart</b></a></li>
+                <li><a href="/bought_list/{{idd}}"><span class="glyphicon glyphicon-edit" style="color: white"></span><b>&nbsp;Bought Items</b></a></li>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>More ..</b><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{url_for('authenticate_seller')}}"><span class="glyphicon glyphicon-usd"></span><b> Sell on Nile </b></a></li>
+                        <li><a href="{{url_for('contact')}}"><span class="glyphicon glyphicon-earphone"></span><b> Contact us </b></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left" action="{{url_for('index')}}" enctype="multipart/form-data" method="POST">
+                <div class="input-group">
+                    {{nform.csrf_token}} {{nform.search(class_="form-control",placeholder="Enter the product name")}}
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit" style="height:1.8vw;">
+                        <i class="glyphicon glyphicon-search"></i>
+                      </button>
+                    </div>
+                </div>
+            </form>
+            <div style="padding-left: 85vw;">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{url_for('adminncheck')}}"><b>ADMIN</b></a></li>
+                </ul>
+            </div>
+            <div style="padding-left: 90vw;">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{url_for('logout')}}"><b>LOGOUT</b></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <center>
+        <h1> <b>Please Share Your Feedback</b></h1><br><br><br><br>
+        <form action="/rate/{{id}}" method="POST">
+            <input type="number" name="stars" step="1" style="width:20vw; height:5vw;" min="1" max="5"><br><br><br>
+            <ul>
+                {% if flag %}
+                <li style="color:red;">Field is Required</li>
+                {% endif %}
+            </ul>
+            <input type="submit" value="Submit" style="width:10vw;" />
+        </form>
+    </center>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Nile : Your online cart</title>
+    <link rel="stylesheet" type="text/css" href="../static/sign_up.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{url_for('decide')}}"><span class="glyphicon glyphicon-home" style="color: white"></span><b>&nbsp;Nile : Your Online Cart</b></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>More ..</b><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{url_for('authenticate_seller')}}"><span class="glyphicon glyphicon-usd"></span><b> Sell on Nile </b></a></li>
+                        <li><a href="{{url_for('contact')}}"><span class="glyphicon glyphicon-earphone"></span><b> Contact us </b></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left" action="{{url_for('index')}}" enctype="multipart/form-data" method="POST">
+                <div class="input-group">
+                    {{nform.csrf_token}} {{nform.search(class_="form-control",placeholder="Enter the product name")}}
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                      </button>
+                    </div>
+                </div>
+            </form>
+            <div style="padding-left: 85vw;">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{url_for('adminncheck')}}"><b>ADMIN</b></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <form action="{{ url_for('signup') }}" style="border:1px solid #ccc" method="post">
+        {{ form.csrf_token }}
+        <div class="container">
+            <h1>Sign Up</h1>
+            <p>Please fill in this form to create an account.</p>
+            <hr>
+
+            <b> {{ form.name.label }} </b> {{ form.name }}
+
+            <b> {{ form.username.label }} </b> {{ form.username }}
+            <ul>
+                {% if exists==1 %}
+                <li style="color:red;">Username Already Exists</li>
+                {% endif %}
+            </ul>
+            <ul>
+                {% if hacker==1 %}
+                <li style="color:red;">Special Charcters Not Allowed</li>
+                {% endif %}
+            </ul>
+
+            <b> {{ form.password.label }} </b> {{ form.password }}
+            <ul>
+                {% for error in form.password.errors %}
+                <li style="color:red;"> {{ error }}</li>
+                {% endfor %}
+            </ul>
+
+            <b> {{ form.contact.label }} </b> {{ form.contact }}
+
+
+
+
+            <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+
+            <div class="clearfix">
+                <button type="submit" class="mbutton">Sign Up</button>
+            </div>
+        </div>
+    </form>
+
+</body>
+
+</html>
